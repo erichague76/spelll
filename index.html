@@ -377,5 +377,24 @@
   // initial
   setStatus("Upload your SpellFinder.txt or paste words to begin.");
 </script>
+  <script>
+async function loadDefaultWordBase() {
+    try {
+        const response = await fetch("wordbase.txt");
+        const text = await response.text();
+
+        // Put the words into the textarea
+        document.getElementById("wordsPaste").value = text;
+
+        // Update the pill status
+        document.getElementById("pill").textContent = "Word base loaded";
+    } catch (err) {
+        console.error("Could not load wordbase.txt", err);
+    }
+}
+
+window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
+</script>
+
 </body>
 </html>
