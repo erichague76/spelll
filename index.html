@@ -197,6 +197,25 @@
   </div>
 
 <script>
+async function loadDefaultWordBase() {
+  try {
+    const response = await fetch("wordbase.txt");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const text = await response.text();
+
+    // Show in the paste area (nice UX)
+    const ta = document.getElementById("wordsPaste");
+    ta.value = text;
+
+    // IMPORTANT: actually use the loaded file
+    WORDS = loadWordsFromText(text);
+
+    // Update UI consistently
+    if (WORDS.length) {
+      setPill(`${WORDS.length} words loaded (default)`, true);
+      setStatus("Default word base loaded. Enter letters and tap Find Words.");
+      hint.textContent = "";
+    } else {
   // ----------------------------
   // State
   // ----------------------------
@@ -359,7 +378,8 @@
       setPill(`${WORDS.length} words loaded (pasted)`, true);
       setStatus("Pasted list loaded. Enter letters and tap Find Words.");
     }else if(text.trim().length){
-      setPill("No valid words found");
+setPill("No valid words found");
+      setStatus("wordbase.txt loaded, but it contains no valid a–z words.", true);
       setStatus("Paste contains no valid words yet (a–z only).", true);
     }
   });
@@ -401,9 +421,15 @@
       console.error("Could not load wordbase.txt", err);
       setPill("Default load failed");
       setStatus("Could not load wordbase.txt. Check console / file path.", true);
-    }
-  }
+}
+  } catch (err) {
+    console.error("Could not load wordbase.txt", err);
+    setPill("Default load failed");
+    setStatus("Could not load wordbase.txt. Check console / file path.", true);
+}
+}
 
+window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
   // initial
   setStatus("Upload your SpellFinder.txt, paste words, or use the default wordbase.");
   window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
