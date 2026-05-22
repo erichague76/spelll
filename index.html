@@ -195,6 +195,50 @@
       </div>
     </div>
   </div>
+<script>
+let WORDS = [];
+
+function loadWordsFromText(text) {
+    const lines = (text || "").split(/\r?\n/);
+    const out = [];
+    for (const line of lines) {
+        const w = line.trim().toLowerCase();
+        if (w && /^[a-z]+$/.test(w)) out.push(w);
+    }
+    return out;
+}
+
+async function loadDefaultWordBase() {
+    try {
+        const response = await fetch("wordbase.txt");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const text = await response.text();
+        WORDS = loadWordsFromText(text);
+
+        if (WORDS.length) {
+            document.getElementById("pill").textContent =
+                `${WORDS.length} words loaded (default)`;
+            document.getElementById("pill").style.color = "#b9ffd1";
+            document.getElementById("pill").style.borderColor =
+                "rgba(185,255,209,.35)";
+            document.getElementById("status").textContent =
+                "Default word base loaded. Enter letters and tap Find Words.";
+        } else {
+            document.getElementById("pill").textContent = "No valid words found";
+            document.getElementById("status").textContent =
+                "wordbase.txt loaded, but it contains no valid a–z words.";
+        }
+    } catch (err) {
+        console.error("Could not load wordbase.txt", err);
+        document.getElementById("pill").textContent = "Default load failed";
+        document.getElementById("status").textContent =
+            "Could not load wordbase.txt. Check file path.";
+    }
+}
+
+window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
+</script>
 
 
 </body>
