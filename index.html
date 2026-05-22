@@ -431,13 +431,13 @@ setPill("No valid words found");
 
 window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
   // initial
-  setStatus("Upload your SpellFinder.txt, paste words, or use the default wordbase.");
+  setStatus("Upload your word.txt, paste words, or use the default wordbase.txt");
   window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
 </script>
 <script>
 async function loadDefaultWordBase() {
     try {
-        const response = await fetch("Spellbase.txt");
+        const response = await fetch("wordbase.txt");
         const text = await response.text();
 
         // Load into textarea
@@ -453,7 +453,7 @@ async function loadDefaultWordBase() {
         document.getElementById("pill").style.borderColor =
             "rgba(185,255,209,.35)";
     } catch (err) {
-        console.error("Could not load Spellbase.txt", err);
+        console.error("Could not load wordbase.txt", err);
     }
 }
 
