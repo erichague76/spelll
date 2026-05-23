@@ -188,47 +188,75 @@
         if (ok) matches.push(w);
       }
 
-      matches.sort();
+     // GLOBAL word list
+let words = [];
 
-      if (!matches.length) {
-        resultsEl.textContent = "No matching words found.";
-        return;
-      }
+// Load dictionary on startup
+fetch("https://raw.githubusercontent.com/erichague76/spelll/main/wordbase.txt")
+  .then(r => r.text())
+  .then(text => {
+    console.log("Loaded word list:", text.substring(0, 200) + "...");
 
-      // Format into columns similar to your Tkinter output
-      const colCount = 6;
-      const colWidth = 12;
+    const raw = text.toLowerCase().trim();
 
-      let out = `${matches.length} matching words:\n\n`;
-      for (let i = 0; i < matches.length; i += colCount) {
-        const row = matches.slice(i, i + colCount);
-        out += row.map(word => (word + " ".repeat(colWidth)).slice(0, colWidth)).join("") + "\n";
-      }
-      resultsEl.textContent = out;
-    }
+    const list = raw.includes("\n")
+      ? raw.split(/\r?\n/)
+      : raw.split(/\s+/);
 
-    function clearAll() {
-      lettersEl.value = "";
-      requiredEl.value = "";
-      resultsEl.textContent = "";
-      lettersEl.focus();
-    }
+    words = list
+      .map(w => w.trim())
+      .filter(w => /^[a-z]+$/.test(w)); // alphabetic only
 
-    // Load wordbase.txt (same folder)
-    fetch("wordbase.txt")
-      .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.text();
-      })
-      .then(text => {
-        // Accept either newline-delimited OR space-delimited word lists
-        // (Your wordbase file appears space-separated in places.)
-        const raw = text.toLowerCase().trim();
-        const list = raw.includes("\n") ? raw.split(/\r?\n/) : raw.split(/\s+/);
+    console.log("Total words loaded:", words.length);
+  })
+  .catch(err => console.error("Error loading word list:", err));
 
-        words = list
-          .map(w => w.trim())
-          .filter(w => /^[a-z]+$/.test(w)); // keep alphabetic only
+
+// Clear UI
+function clearAll() {
+  lettersEl.value = "";
+  requiredEl.value = "";
+  resultsEl.textContent = "";
+  lettersEl.focus();
+}
+
+
+// Solve function (your formatting logic is correct)
+function solve() {
+  const letters = lettersEl.value.toLowerCase().trim();
+  const required = requiredEl.value.toLowerCase().trim();
+
+  if (!letters || !required) {
+    resultsEl.textContent = "Enter letters and required letter.";
+    return;
+  }
+
+  const matches = words.filter(w =>
+    w.includes(required) &&
+    [...w].every(ch => letters.includes(ch))
+  );
+
+  matches.sort();
+
+  if (!matches.length) {
+    resultsEl.textContent = "No matching words found.";
+    return;
+  }
+
+  // Format into columns like Tkinter
+  const colCount = 6;
+  const colWidth = 12;
+
+  let out = `${matches.length} matching words:\n\n`;
+  for (let i = 0; i < matches.length; i += colCount) {
+    const row = matches.slice(i, i + colCount);
+    out += row
+      .map(word => (word + " ".repeat(colWidth)).slice(0, colWidth))
+      .join("") + "\n";
+  }
+
+  resultsEl.textContent = out;
+}
 
         setStatus(`Loaded ${words.length.toLocaleString()} words from wordbase.txt`);
         resultsEl.textContent = "Ready. Enter letters and a required letter, then click “Find Words”.";
