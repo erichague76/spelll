@@ -1,238 +1,257 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>SpellFinder (Phone Ready)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SpellFinder</title>
   <style>
-    :root{
-      --bg:#0b1220;
-      --card:#111a2e;
-      --text:#e9eefc;
-      --muted:#aab6d6;
-      --accent:#5da8ff;
-      --bad:#ff6b6b;
-      --border:rgba(255,255,255,.12);
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --text: #e7eefc;
+      --muted: #9db0d1;
+      --accent: #5aa7ff;
+      --border: rgba(255,255,255,.12);
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
+    body {
+      margin: 0;
+      padding: 24px;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, #14214a 0%, var(--bg) 55%);
-      color:var(--text);
-      min-height:100svh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-    }
-    .app{
-      width:min(720px, 100%);
-      background: color-mix(in srgb, var(--card) 92%, black 8%);
-      border:1px solid var(--border);
-      border-radius:20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      padding:16px;
-    }
-    header{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-      margin-bottom:12px;
-    }
-    h1{margin:0;font-size:20px;letter-spacing:.2px}
-    .sub{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.35}
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.05);
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-    }
-    .grid{
-      display:grid;
-      gap:12px;
-      grid-template-columns: 1fr;
-    }
-    @media (min-width: 720px){
-      .grid{ grid-template-columns: 1.1fr .9fr; align-items:start; }
-    }
-    .card{
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px;
-      background: rgba(255,255,255,.04);
-    }
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:10px 0 6px;
-    }
-    input[type="text"]{
-      width:100%;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.18);
-      color:var(--text);
-      padding:12px 12px;
-      font-size:16px;
-      outline:none;
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .row .span2{ grid-column: 1 / -1; }
-    .btns{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:12px;
-    }
-    button{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.06);
+      background: radial-gradient(1200px 600px at 20% 0%, #152145 0%, var(--bg) 55%);
       color: var(--text);
-      padding:12px 14px;
-      border-radius:14px;
-      font-weight:700;
-      cursor:pointer;
-      flex: 1 1 140px;
-      transition: transform .05s ease, background .2s ease;
-      font-size:15px;
     }
-    button:hover{ background: rgba(255,255,255,.10); }
-    button:active{ transform: scale(.99); }
-    button.primary{
-      background: color-mix(in srgb, var(--accent) 28%, rgba(255,255,255,.06) 72%);
-      border-color: color-mix(in srgb, var(--accent) 40%, rgba(255,255,255,.12) 60%);
+    .wrap { max-width: 900px; margin: 0 auto; }
+    .title { font-size: 28px; font-weight: 800; letter-spacing: .3px; }
+    .subtitle { color: var(--muted); margin-top: 6px; }
+    .card {
+      margin-top: 18px;
+      background: rgba(18,26,43,.86);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
     }
-    button.danger{
-      background: color-mix(in srgb, var(--bad) 22%, rgba(255,255,255,.06) 78%);
-      border-color: color-mix(in srgb, var(--bad) 35%, rgba(255,255,255,.12) 65%);
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 700px) { .row { grid-template-columns: 1fr; } }
+
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      outline: none;
+      font-size: 16px;
+      letter-spacing: .5px;
     }
-    .status{
-      margin-top:10px;
-      font-size:13px;
-      color:var(--muted);
-      min-height: 1.6em;
-      line-height:1.35;
+    input:focus { border-color: rgba(90,167,255,.7); box-shadow: 0 0 0 4px rgba(90,167,255,.12); }
+
+    .actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+    button {
+      appearance: none;
+      border: 1px solid rgba(90,167,255,.55);
+      background: linear-gradient(180deg, rgba(90,167,255,.25), rgba(90,167,255,.10));
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
     }
-    .mono{
+    button:hover { border-color: rgba(90,167,255,.9); }
+    button.secondary { border-color: var(--border); background: rgba(255,255,255,.05); font-weight: 650; }
+    .status {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    pre {
+      margin: 14px 0 0 0;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      overflow: auto;
+      min-height: 240px;
+      white-space: pre-wrap;
+      word-break: break-word;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size:13px;
-      white-space:pre;
-      overflow:auto;
-      max-height: 55svh;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.18);
-      padding:12px;
+      line-height: 1.35;
     }
-    .tiny{
-      font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35
+    .hint { margin-top: 10px; color: var(--muted); font-size: 13px; }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 6px;
     }
-    .warn{ color: #ffd27a; }
   </style>
 </head>
+
 <body>
-  <div class="app">
-    <header>
-      <div>
-        <h1>SpellFinder</h1>
-        <div class="sub">
-          Using built‑in wordbase.txt (no uploads or paste).
+  <div class="wrap">
+    <div class="title">SpellFinder <span class="pill">GitHub Pages</span></div>
+    <div class="subtitle">Find words made from your letters that include a required letter.</div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="letters">Enter letters (usually 7)</label>
+          <input id="letters" placeholder="e.g. aelnrst" autocomplete="off" />
         </div>
-      </div>
-      <div class="pill" id="pill">Loading…</div>
-    </header>
-
-    <div class="grid">
-      <div class="card">
-
-        <div class="row">
-          <div>
-            <label>Enter 7 letters</label>
-            <input id="letters" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="abcdefg" />
-          </div>
-          <div>
-            <label>Required letter</label>
-            <input id="required" type="text" inputmode="text" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="a" />
-          </div>
-
-          <div class="span2 btns">
-            <button class="primary" id="find">Find Words</button>
-            <button id="copy">Copy Results</button>
-            <button class="danger" id="clear">Clear</button>
-          </div>
-        </div>
-
-        <div class="status" id="status"></div>
-        <div class="tiny">
-          Required letter must appear in the word.
+        <div>
+          <label for="required">Required letter (1 letter)</label>
+          <input id="required" placeholder="e.g. a" maxlength="1" autocomplete="off" />
         </div>
       </div>
 
-      <div class="card">
-        <div class="mono" id="results">(results will appear here)</div>
-        <div class="tiny warn" id="hint"></div>
+      <div class="actions">
+        <button id="findBtn">Find Words</button>
+        <button id="clearBtn" class="secondary">Clear</button>
+        <span id="status" class="status">Loading wordbase.txt…</span>
+      </div>
+
+      <pre id="results">Loading…</pre>
+
+      <div class="hint">
+        Make sure <b>wordbase.txt</b> is in the <b>same folder</b> as this <b>index.html</b> in your repo.
       </div>
     </div>
-  </div><script>
-let WORDS = [];
+  </div>
 
-function loadWordsFromText(text) {
-    return text
-        .split(/\r?\n/)
-        .map(w => w.trim().toLowerCase())
-        .filter(w => /^[a-z]+$/.test(w));
-}
+  <script>
+    // ---- SpellFinder Web (single-file) ----
+    // Requires: wordbase.txt located next to index.html in the repo.
 
-async function loadDefaultWordBase() {
-    try {
-        const response = await fetch("https://raw.githubusercontent.com/erichague76/spelll/main/wordbase.txt", {
-            headers: { "Accept": "text/plain" }
-        });
+    const statusEl = document.getElementById("status");
+    const resultsEl = document.getElementById("results");
+    const lettersEl = document.getElementById("letters");
+    const requiredEl = document.getElementById("required");
+    const findBtn = document.getElementById("findBtn");
+    const clearBtn = document.getElementById("clearBtn");
 
-        const text = await response.text();
-        WORDS = loadWordsFromText(text);
+    let words = [];
 
-        const pill = document.getElementById("pill");
-        const status = document.getElementById("status");
-
-        if (WORDS.length) {
-            pill.textContent = `${WORDS.length} words loaded`;
-            pill.style.color = "#b9ffd1";
-            pill.style.borderColor = "rgba(185,255,209,.35)";
-            status.textContent = "Wordbase loaded. Enter letters and tap Find Words.";
-        } else {
-            pill.textContent = "No valid words found";
-            status.textContent = "wordbase.txt loaded, but contains no valid words.";
-        }
-    } catch (err) {
-        console.error("Could not load wordbase.txt", err);
-        document.getElementById("pill").textContent = "Load failed";
-        document.getElementById("status").textContent =
-            "Could not load wordbase.txt. Check file path.";
+    function setStatus(msg) {
+      statusEl.textContent = msg;
     }
-}
 
-window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
-</script>
+    function normalizeLetters(s) {
+      return (s || "").toLowerCase().replace(/[^a-z]/g, "");
+    }
 
+    function runFilter() {
+      const allowedRaw = normalizeLetters(lettersEl.value);
+      const required = normalizeLetters(requiredEl.value).slice(0, 1);
 
+      resultsEl.textContent = "";
 
+      if (!allowedRaw) {
+        resultsEl.textContent = "Please enter letters (a-z only).";
+        return;
+      }
+      if (!required || required.length !== 1) {
+        resultsEl.textContent = "Required letter must be exactly ONE letter (a-z).";
+        return;
+      }
 
+      const allowedSet = new Set(allowedRaw.split(""));
+      if (!allowedSet.has(required)) {
+        resultsEl.textContent =
+          "Required letter is not in your allowed letters.\n" +
+          "Add it to the letters, or change the required letter.";
+        return;
+      }
 
+      if (!words.length) {
+        resultsEl.textContent =
+          "Word list not loaded.\nMake sure wordbase.txt exists in the repo next to index.html.";
+        return;
+      }
 
+      // Filter: required letter present, and all letters in word are allowed.
+      const matches = [];
+      for (const w of words) {
+        if (!w) continue;
+        if (!w.includes(required)) continue;
 
+        let ok = true;
+        for (let i = 0; i < w.length; i++) {
+          if (!allowedSet.has(w[i])) { ok = false; break; }
+        }
+        if (ok) matches.push(w);
+      }
 
+      matches.sort();
+
+      if (!matches.length) {
+        resultsEl.textContent = "No matching words found.";
+        return;
+      }
+
+      // Format into columns similar to your Tkinter output
+      const colCount = 6;
+      const colWidth = 12;
+
+      let out = `${matches.length} matching words:\n\n`;
+      for (let i = 0; i < matches.length; i += colCount) {
+        const row = matches.slice(i, i + colCount);
+        out += row.map(word => (word + " ".repeat(colWidth)).slice(0, colWidth)).join("") + "\n";
+      }
+      resultsEl.textContent = out;
+    }
+
+    function clearAll() {
+      lettersEl.value = "";
+      requiredEl.value = "";
+      resultsEl.textContent = "";
+      lettersEl.focus();
+    }
+
+    // Load wordbase.txt (same folder)
+    fetch("wordbase.txt")
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.text();
+      })
+      .then(text => {
+        // Accept either newline-delimited OR space-delimited word lists
+        // (Your wordbase file appears space-separated in places.)
+        const raw = text.toLowerCase().trim();
+        const list = raw.includes("\n") ? raw.split(/\r?\n/) : raw.split(/\s+/);
+
+        words = list
+          .map(w => w.trim())
+          .filter(w => /^[a-z]+$/.test(w)); // keep alphabetic only
+
+        setStatus(`Loaded ${words.length.toLocaleString()} words from wordbase.txt`);
+        resultsEl.textContent = "Ready. Enter letters and a required letter, then click “Find Words”.";
+        lettersEl.focus();
+      })
+      .catch(err => {
+        setStatus("Could not load wordbase.txt");
+        resultsEl.textContent =
+          "ERROR: Couldn't load wordbase.txt.\n\n" +
+          "Fix:\n" +
+          "1) Put wordbase.txt in the SAME folder as index.html\n" +
+          "2) Commit + push to GitHub\n" +
+          "3) Enable GitHub Pages (Settings → Pages)\n\n" +
+          `Details: ${err}`;
+      });
+
+    findBtn.addEventListener("click", runFilter);
+    clearBtn.addEventListener("click", clearAll);
+
+    // Press Enter to run
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") runFilter();
+    });
+  </script>
 </body>
 </html>
