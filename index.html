@@ -199,13 +199,10 @@ function loadWordsFromText(text) {
 
 async function loadDefaultWordBase() {
     try {
-        const response = await fetch("https://raw.githubusercontent.com/erichague76/spelll/main/wordbase.txt")
-  .then(response => response.text())
-  .then(text => {
-    const words = text.split(/\r?\n/).filter(w => w.trim().length > 0);
-    loadWords(words);
-  });
+        const response = await fetch("https://raw.githubusercontent.com/erichague76/spelll/main/wordbase.txt");
+        const text = await response.text();
 
+        WORDS = loadWordsFromText(text);
 
         const pill = document.getElementById("pill");
         const status = document.getElementById("status");
@@ -229,6 +226,7 @@ async function loadDefaultWordBase() {
 
 window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
 </script>
+
 
 </body>
 </html>
