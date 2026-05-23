@@ -74,7 +74,7 @@
       color:var(--muted);
       margin:10px 0 6px;
     }
-    input[type="text"], textarea{
+    input[type="text"]{
       width:100%;
       border-radius:14px;
       border:1px solid var(--border);
@@ -83,10 +83,6 @@
       padding:12px 12px;
       font-size:16px;
       outline:none;
-    }
-    input[type="file"]{
-      width:100%;
-      color:var(--muted);
     }
     .row{
       display:grid;
@@ -152,19 +148,14 @@
       <div>
         <h1>SpellFinder</h1>
         <div class="sub">
-          Upload your word list (one word per line) or paste it. Then enter 7 letters + required letter.
+          Using built‑in wordbase.txt (no uploads or paste).
         </div>
       </div>
-      <div class="pill" id="pill">No word list loaded</div>
+      <div class="pill" id="pill">Loading…</div>
     </header>
 
     <div class="grid">
       <div class="card">
-        <label>Word list (.txt) upload</label>
-        <input id="file" type="file" accept=".txt,text/plain" />
-
-        <label>Or paste word list (one word per line)</label>
-        <textarea id="wordsPaste" rows="6" placeholder="example&#10;another&#10;words"></textarea>
 
         <div class="row">
           <div>
@@ -185,7 +176,7 @@
 
         <div class="status" id="status"></div>
         <div class="tiny">
-          Tips: letters can include duplicates; filtering uses unique letters (like your Python <code>set()</code> logic). Required letter must appear in the word.
+          Required letter must appear in the word.
         </div>
       </div>
 
@@ -195,6 +186,7 @@
       </div>
     </div>
   </div>
+
 <script>
 let WORDS = [];
 
@@ -217,17 +209,17 @@ async function loadDefaultWordBase() {
         const status = document.getElementById("status");
 
         if (WORDS.length) {
-            pill.textContent = `${WORDS.length} words loaded (default)`;
+            pill.textContent = `${WORDS.length} words loaded`;
             pill.style.color = "#b9ffd1";
             pill.style.borderColor = "rgba(185,255,209,.35)";
-            status.textContent = "Default word base loaded. Enter letters and tap Find Words.";
+            status.textContent = "Wordbase loaded. Enter letters and tap Find Words.";
         } else {
             pill.textContent = "No valid words found";
             status.textContent = "wordbase.txt loaded, but contains no valid words.";
         }
     } catch (err) {
         console.error("Could not load wordbase.txt", err);
-        document.getElementById("pill").textContent = "Default load failed";
+        document.getElementById("pill").textContent = "Load failed";
         document.getElementById("status").textContent =
             "Could not load wordbase.txt. Check file path.";
     }
@@ -236,7 +228,5 @@ async function loadDefaultWordBase() {
 window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
 </script>
 
-
 </body>
 </html>
-``F
