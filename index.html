@@ -186,7 +186,6 @@
       </div>
     </div>
   </div>
-
 <script>
 let WORDS = [];
 
@@ -199,7 +198,7 @@ function loadWordsFromText(text) {
 
 async function loadDefaultWordBase() {
     try {
-        const response = await fetch("https://raw.githubusercontent.com/erichague76/spelll/main/wordbase.txt");
+        const response = await fetch("https://raw.githubusercontent.com/erichague76/spelll/main/wordbase.txt?raw=1");
         const text = await response.text();
 
         WORDS = loadWordsFromText(text);
@@ -226,6 +225,8 @@ async function loadDefaultWordBase() {
 
 window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
 </script>
+
+
 
 
 
