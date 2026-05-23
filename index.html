@@ -198,9 +198,11 @@ function loadWordsFromText(text) {
 
 async function loadDefaultWordBase() {
     try {
-        const response = await fetch("https://raw.githubusercontent.com/erichague76/spelll/main/wordbase.txt?raw=1");
-        const text = await response.text();
+        const response = await fetch("https://erichague76.github.io/spelll/wordbase.txt", {
+            headers: { "Accept": "text/plain" }
+        });
 
+        const text = await response.text();
         WORDS = loadWordsFromText(text);
 
         const pill = document.getElementById("pill");
@@ -225,6 +227,7 @@ async function loadDefaultWordBase() {
 
 window.addEventListener("DOMContentLoaded", loadDefaultWordBase);
 </script>
+
 
 
 
